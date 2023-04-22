@@ -1,10 +1,10 @@
 import { VStack, Image, Text, Center, Heading, ScrollView } from 'native-base'
 import BackgroundOImg from '@assets/background.png'
-import GymLogoSVG from '@assets/logo.svg'
+
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 import { Header } from '@components/Header'
-export function SignIn() {
+export function SignUp() {
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -23,32 +23,25 @@ export function SignIn() {
           source={BackgroundOImg}
         />
         <Header />
-        <Center>
+        <Center >
           <Heading
             color="gray.100"
             fontSize='xl'
             mb={6}
             fontFamily='heading'>
-            Acesse sua conta
+            Crie sua conta
           </Heading>
         </Center>
         <Center mb={6}>
+          <Input placeholder='Nome' />
           <Input
             placeholder='E-mail'
             keyboardType='email-address'
             autoCapitalize='none' />
           <Input placeholder='Password' secureTextEntry />
-          <Button title='Acessar' />
+          <Button title='Criar e acessar' />
         </Center>
-        <Center mt={16}>
-          <Text
-            color='gray.100'
-            fontFamily='body'
-            fontSize='sm'
-            mb={3}>
-            Ainda não Tem Acesso?</Text>
-          <Button title='Criar conta' variant='outline' />
-        </Center>
+        <Button title='Voltar para o login' variant='outline' mt='12' />
       </VStack>
     </ScrollView>
   )

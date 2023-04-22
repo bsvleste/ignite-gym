@@ -4,6 +4,7 @@ import { NativeBaseProvider, Box } from 'native-base';
 import { THEME } from './src/theme'
 import { SignIn } from '@screens/SigiIn';
 import { Loading } from '@components/Loading';
+import { SignUp } from '@screens/SingUp';
 export default function App() {
   const [fontsLoaded] = useFonts({
     Roboto_400Regular, Roboto_700Bold

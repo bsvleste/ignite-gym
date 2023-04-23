@@ -59,6 +59,7 @@ export function SignIn() {
             onPress={handleNavigateToSignUp} />
         </Center>
       </VStack>
+
     </ScrollView>
   )
 }

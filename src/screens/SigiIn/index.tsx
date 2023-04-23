@@ -1,10 +1,15 @@
 import { VStack, Image, Text, Center, Heading, ScrollView } from 'native-base'
 import BackgroundOImg from '@assets/background.png'
-import GymLogoSVG from '@assets/logo.svg'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 import { Header } from '@components/Header'
+import { useNavigation } from '@react-navigation/native'
+import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
 export function SignIn() {
+  const navigation = useNavigation<AuthNavigatorRoutesProps>()
+  function handleNavigateToSignUp() {
+    navigation.navigate("signUp")
+  }
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -13,14 +18,14 @@ export function SignIn() {
       <VStack
         px={5}
         flex={1}
-        bg='gray.700'
         pb={16}
       >
         <Image
           position="absolute"
           resizeMode='contain'
-          alt='pessoal malhando'
           source={BackgroundOImg}
+          defaultSource={BackgroundOImg}
+          alt='pessoal malhando'
         />
         <Header />
         <Center>
@@ -46,8 +51,12 @@ export function SignIn() {
             fontFamily='body'
             fontSize='sm'
             mb={3}>
-            Ainda não Tem Acesso?</Text>
-          <Button title='Criar conta' variant='outline' />
+            Ainda não tem acesso?</Text>
+          <Button
+            title='Criar
+            conta'
+            variant='outline'
+            onPress={handleNavigateToSignUp} />
         </Center>
       </VStack>
     </ScrollView>

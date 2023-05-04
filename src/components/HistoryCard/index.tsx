@@ -1,6 +1,8 @@
 import { HStack, Heading, Text, VStack } from "native-base";
-
-export function HistoryCard() {
+type HistoryCardProps = {
+  title: string
+}
+export function HistoryCard({ title }: HistoryCardProps) {
   return (
     <HStack
       w={'full'}
@@ -18,7 +20,7 @@ export function HistoryCard() {
           fontSize={'md'}
           textTransform={'capitalize'}
         >
-          Costas
+          {title}
         </Heading>
         <Text
           color={'gray.100'}

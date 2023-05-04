@@ -36,11 +36,11 @@ export function History() {
         px={8}
         contentContainerStyle={[].length === 0 && { flex: 1, justifyContent: 'center' }}
         ListEmptyComponent={() => (
-          <VStack>
+          <VStack mt={'16'}>
             <Center>
               <MaterialCommunityIcons name="weight-lifter" size={64} color={'white'} />
-              <Text color={'gray.100'} textAlign={'center'} fontSize={'md'}>
-                Não Há exercicios registrados ainda.{'\n'}Vamos treinar hoje?
+              <Text color={'gray.100'} textAlign={'center'} fontSize={'md '}>
+                Não Há exercicios registrados ainda.Vamos treinar hoje?
               </Text>
             </Center>
           </VStack>

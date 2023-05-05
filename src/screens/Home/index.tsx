@@ -10,7 +10,10 @@ export function Home() {
   const [groupSelected, setGroupSelected] = useState('costas')
   const [exercises, setExercises] = useState(['costas', 'ombros', 'biceps', 'triceps'])
   const [groups, setGroups] = useState(['costas', 'ombros', 'biceps', 'triceps'])
-  const navigation = useNavigation<AppNavigatorRoutesProps>()
+  const { navigate } = useNavigation<AppNavigatorRoutesProps>()
+  function handleOpenExerciseDetails() {
+    navigate('exercise')
+  }
   return (
     <VStack flex={1}>
       <HomeHeader />
@@ -31,6 +34,7 @@ export function Home() {
         }}
         my={10}
         maxH={10}
+        minH={10}
       />
       <VStack flex={1} px={8}>
         <HStack justifyContent={'space-between'} mb={5}>
@@ -41,7 +45,7 @@ export function Home() {
           data={exercises}
           keyExtractor={item => item}
           renderItem={({ item }) => (
-            <ExerciseCard onPress={() => { navigation.navigate('exercise') }} />
+            <ExerciseCard onPress={handleOpenExerciseDetails} />
           )}
           showsHorizontalScrollIndicator={false}
           _contentContainerStyle={{

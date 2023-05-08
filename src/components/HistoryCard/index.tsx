@@ -22,6 +22,7 @@ export function HistoryCard({ title }: HistoryCardProps) {
           color={"white"}
           fontSize={'md'}
           textTransform={'capitalize'}
+          fontFamily={'heading'}
         >
           {title}
         </Heading>

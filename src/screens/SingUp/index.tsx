@@ -1,15 +1,38 @@
-import { VStack, Image, Text, Center, Heading, ScrollView } from 'native-base'
+import { useNavigation } from '@react-navigation/native'
+import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { useForm, Controller } from 'react-hook-form'
+import { VStack, Image, Center, Heading, ScrollView } from 'native-base'
 import BackgroundOImg from '@assets/background.png'
-
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 import { Header } from '@components/Header'
-import { useNavigation } from '@react-navigation/native'
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+
+type SignupProps = {
+  name: string
+  email: string
+  password: string
+  confirm_password: string
+}
+const signupSchema = yup.object({
+  name: yup.string().required('Infome o nome'),
+  email: yup.string().required("Informe o E-mail").email("E-mail invalido"),
+  password: yup.string().required('Infome a senha').min(6, "A senha deve conter no minimo 6 digitos"),
+  confirm_password: yup.string()
+    .required('Confirme a senha')
+    .oneOf([yup.ref('password')], "As senhas não conferem!"),
+})
 export function SignUp() {
-  const navigation = useNavigation<AuthNavigatorRoutesProps>()
+  const { handleSubmit, control, formState: { errors } } = useForm<SignupProps>({
+    resolver: yupResolver(signupSchema)
+  })
+  const { goBack } = useNavigation<AuthNavigatorRoutesProps>()
   function handleNavigateToSignIn() {
-    navigation.navigate('signIn')
+    goBack()
+  }
+  function handleSignUp(data: SignupProps) {
+    console.log(data)
   }
   return (
     <ScrollView
@@ -39,13 +62,63 @@ export function SignUp() {
           </Heading>
         </Center>
         <Center mb={6}>
-          <Input placeholder='Nome' />
-          <Input
-            placeholder='E-mail'
-            keyboardType='email-address'
-            autoCapitalize='none' />
-          <Input placeholder='Password' secureTextEntry />
-          <Button title='Criar e acessar' />
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder='Nome'
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.name?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder='E-mail'
+                keyboardType='email-address'
+                autoCapitalize='none'
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.email?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder='Password'
+                secureTextEntry
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.password?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="confirm_password"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder='Confirme o password'
+                secureTextEntry
+                onChangeText={onChange}
+                value={value}
+                onSubmitEditing={handleSubmit(handleSignUp)}
+                returnKeyType='send'
+                errorMessage={errors.confirm_password?.message}
+              />
+            )}
+          />
+          <Button title='Criar e acessar' onPress={handleSubmit(handleSignUp)} />
         </Center>
         <Button title='Voltar para o login' variant='outline' mt='12' onPress={handleNavigateToSignIn} />
       </VStack>

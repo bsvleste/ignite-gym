@@ -28,6 +28,7 @@ export function ExerciseCard({ ...props }: ExerciseCardProps) {
           <Heading
             fontSize={'lg'}
             color={'white'}
+            fontFamily={'heading'}
           >
             Remada unilatreal
           </Heading>

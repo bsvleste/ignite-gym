@@ -15,8 +15,13 @@ export function HomeHeader() {
     >
       <UserPhoto mr={4} size={16} source={{ uri: "https://github.com/bsvleste.png" }} alt="foto do usuario" />
       <VStack flex={1}>
-        <Text color='gray.100' fontSize='md' >Ola</Text>
-        <Heading color='gray.100' fontSize='md'>Bruno</Heading>
+        <Text color='gray.100' fontSize='md' fontFamily={'heading'}>Ola</Text>
+        <Heading
+          color='gray.100'
+          fontSize='md'
+          fontFamily={'heading'}>
+          Bruno
+        </Heading>
       </VStack>
       <TouchableOpacity>
         <Icon

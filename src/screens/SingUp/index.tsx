@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
 import { useForm, Controller } from 'react-hook-form'
-import { VStack, Image, Center, Heading, ScrollView } from 'native-base'
+import { VStack, Image, Center, Heading, ScrollView, Toast, useToast } from 'native-base'
 import BackgroundOImg from '@assets/background.png'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 import { Header } from '@components/Header'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { api } from '@services/api'
+import { AppError } from '@utils/AppError'
 
 type SignupProps = {
   name: string
@@ -24,15 +26,34 @@ const signupSchema = yup.object({
     .oneOf([yup.ref('password')], "As senhas não conferem!"),
 })
 export function SignUp() {
-  const { handleSubmit, control, formState: { errors } } = useForm<SignupProps>({
+  const toast = useToast()
+  const { handleSubmit, control, formState: { errors, isLoading } } = useForm<SignupProps>({
     resolver: yupResolver(signupSchema)
   })
   const { goBack } = useNavigation<AuthNavigatorRoutesProps>()
   function handleNavigateToSignIn() {
     goBack()
   }
-  function handleSignUp(data: SignupProps) {
-    console.log(data)
+  async function handleSignUp({ name, email, password }: SignupProps) {
+    try {
+      await api.post('/users', { name, email, password })
+      toast.show({
+        title: "Usuario cadastrado com sucesso",
+        placement: 'top',
+        bgColor: "green.500",
+      })
+
+    } catch (error) {
+      const isAppErrro = error instanceof AppError;
+      const errorTitle = isAppErrro ? error.message : 'Não foi possivel criar conta. Tente novamente mais tarde'
+      if (isAppErrro) {
+        toast.show({
+          title: `${errorTitle}`,
+          placement: 'top',
+          bgColor: "red.500",
+        })
+      }
+    }
   }
   return (
     <ScrollView

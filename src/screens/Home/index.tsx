@@ -5,12 +5,15 @@ import { FlatList, HStack, Heading, ScrollView, Text, VStack } from "native-base
 import { ExerciseCard } from "@components/ExerciseCard";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { useAuth } from "@hooks/useAuth";
 
 export function Home() {
+
   const [groupSelected, setGroupSelected] = useState('costas')
   const [exercises, setExercises] = useState(['costas', 'ombros', 'biceps', 'triceps'])
   const [groups, setGroups] = useState(['costas', 'ombros', 'biceps', 'triceps'])
   const { navigate } = useNavigation<AppNavigatorRoutesProps>()
+
   function handleOpenExerciseDetails() {
     navigate('exercise')
   }

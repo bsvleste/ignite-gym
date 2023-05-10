@@ -10,6 +10,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { api } from '@services/api'
 import { AppError } from '@utils/AppError'
+import { useState } from 'react'
+import { useAuth } from '@hooks/useAuth'
 
 type SignupProps = {
   name: string
@@ -26,8 +28,10 @@ const signupSchema = yup.object({
     .oneOf([yup.ref('password')], "As senhas não conferem!"),
 })
 export function SignUp() {
+  const [isLoading, setIsLoading] = useState(false)
+  const { signIn } = useAuth()
   const toast = useToast()
-  const { handleSubmit, control, formState: { errors, isLoading } } = useForm<SignupProps>({
+  const { handleSubmit, control, formState: { errors } } = useForm<SignupProps>({
     resolver: yupResolver(signupSchema)
   })
   const { goBack } = useNavigation<AuthNavigatorRoutesProps>()
@@ -36,14 +40,17 @@ export function SignUp() {
   }
   async function handleSignUp({ name, email, password }: SignupProps) {
     try {
+      setIsLoading(true)
       await api.post('/users', { name, email, password })
       toast.show({
         title: "Usuario cadastrado com sucesso",
         placement: 'top',
         bgColor: "green.500",
       })
+      await signIn(email, password)
 
     } catch (error) {
+      setIsLoading(false)
       const isAppErrro = error instanceof AppError;
       const errorTitle = isAppErrro ? error.message : 'Não foi possivel criar conta. Tente novamente mais tarde'
       if (isAppErrro) {
@@ -139,7 +146,11 @@ export function SignUp() {
               />
             )}
           />
-          <Button title='Criar e acessar' onPress={handleSubmit(handleSignUp)} />
+          <Button
+            title='Criar e acessar'
+            onPress={handleSubmit(handleSignUp)}
+            isLoading={isLoading}
+          />
         </Center>
         <Button title='Voltar para o login' variant='outline' mt='12' onPress={handleNavigateToSignIn} />
       </VStack>

@@ -1,5 +1,6 @@
 import { UserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
+import { getAuthTokenStorage, storageAuthToken } from "@storage/storageAuthToken";
 import { getUserStorage, removeUserStorage, storageUserSave } from "@storage/storageUser";
 import { AppError } from "@utils/AppError";
 import { useToast } from "native-base";
@@ -23,11 +24,16 @@ export function AuthContextProvider({ children }: AuthContextProps) {
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true)
   const toast = useToast()
 
+  async function userAndTokenUpdate(userData: UserDTO, token: string) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    setUser(userData)
+  }
   async function signOut() {
     try {
       setIsLoadingUserStorageData(true)
-      await removeUserStorage()
       setUser(null)
+      await removeUserStorage()
+      await removeUserStorage()
     } catch (error) {
       throw error
     } finally {
@@ -38,9 +44,11 @@ export function AuthContextProvider({ children }: AuthContextProps) {
     try {
       setIsLoading(true)
       const { data } = await api.post('/sessions', { email, password })
-      if (data.user) {
-        setUser(data.user)
-        storageUserSave(data.user)
+      if (data.user && data.token) {
+        setIsLoadingUserStorageData(true)
+        await storageUserSave(data.user)
+        await storageAuthToken(data.token)
+        userAndTokenUpdate(data.user, data.token)
       }
     } catch (error) {
       const isAppErrro = error instanceof AppError;
@@ -55,14 +63,16 @@ export function AuthContextProvider({ children }: AuthContextProps) {
       }
     } finally {
       setIsLoading(false)
+      setIsLoadingUserStorageData(false)
     }
   }
   async function getUserData() {
     try {
+      setIsLoadingUserStorageData(true)
       const userLogged = await getUserStorage()
-      if (userLogged) {
-        setUser(userLogged)
-
+      const token = await getAuthTokenStorage()
+      if (token && userLogged) {
+        userAndTokenUpdate(userLogged, token)
       }
     } catch (error) {
       throw error

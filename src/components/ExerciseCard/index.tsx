@@ -1,10 +1,14 @@
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { HStack, Heading, Icon, Image, Text, VStack } from "native-base";
 import { Entypo } from "@expo/vector-icons"
+import { UserDTO } from "@dtos/UserDTO";
+import { ExerciseDTO } from "@dtos/ExercisesDTO";
+import { api } from "@services/api";
 type ExerciseCardProps = TouchableOpacityProps & {
-
+  data: ExerciseDTO
 }
-export function ExerciseCard({ ...props }: ExerciseCardProps) {
+export function ExerciseCard({ data, ...props }: ExerciseCardProps) {
+
   return (
     <TouchableOpacity {...props}>
       <HStack
@@ -16,7 +20,7 @@ export function ExerciseCard({ ...props }: ExerciseCardProps) {
         mb={4}
       >
         <Image
-          source={{ uri: 'https://www.smartfit.com.br/news/wp-content/uploads/2021/09/remada-curvada-como-fazer-800x533.jpg' }}
+          source={{ uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}` }}
           alt="remada lateral"
           w={16}
           h={16}
@@ -30,7 +34,7 @@ export function ExerciseCard({ ...props }: ExerciseCardProps) {
             color={'white'}
             fontFamily={'heading'}
           >
-            Remada unilatreal
+            {data.name}
           </Heading>
           <Text
             fontSize={'sm'}
@@ -38,7 +42,7 @@ export function ExerciseCard({ ...props }: ExerciseCardProps) {
             mt={1}
             numberOfLines={2}
           >
-            3 series x 12 repetições
+            {data.series} séries x {data.repetitions}
           </Text>
         </VStack>
         <Icon

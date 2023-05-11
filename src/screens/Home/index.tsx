@@ -14,24 +14,23 @@ import { Loading } from "@components/Loading";
 export function Home() {
   const toast = useToast()
   const [isLoading, setIsLoading] = useState(true)
-  const [groupSelected, setGroupSelected] = useState('costas')
+  const [groupSelected, setGroupSelected] = useState('antebraço')
   const [exercises, setExercises] = useState<ExerciseDTO[]>([])
   const [groups, setGroups] = useState<string[]>([])
   const { navigate } = useNavigation<AppNavigatorRoutesProps>()
 
-  function handleOpenExerciseDetails() {
-    navigate('exercise')
+  function handleOpenExerciseDetails(exercisesId: string) {
+    navigate('exercise', { exercisesId })
   }
   async function fetchGroups() {
     try {
-
       const response = await api.get('/groups')
       setGroups(response.data)
     } catch (error) {
       const isAppError = error instanceof AppError
       const title = isAppError ? error.message : "Não foi possivel buscar os dados, tente novamente"
       toast.show({
-        title: `${title}`,
+        title,
         placement: 'top',
         bgColor: "red.500"
       })
@@ -46,7 +45,7 @@ export function Home() {
       const isAppError = error instanceof AppError
       const title = isAppError ? error.message : "Não foi possivel buscar os dados, tente novamente"
       toast.show({
-        title: `${title}`,
+        title,
         placement: 'top',
         bgColor: "red.500"
       })
@@ -101,7 +100,7 @@ export function Home() {
               data={exercises}
               keyExtractor={item => item.id}
               renderItem={({ item }) => (
-                <ExerciseCard onPress={handleOpenExerciseDetails} data={item} />
+                <ExerciseCard onPress={() => handleOpenExerciseDetails(item.id)} data={item} />
               )}
               showsHorizontalScrollIndicator={false}
               _contentContainerStyle={{
@@ -109,7 +108,6 @@ export function Home() {
               }}
             />
           </VStack >
-
       }
     </VStack >
   )

@@ -4,6 +4,7 @@ import { UserPhoto } from "@components/UserPhoto";
 import userDefaultPhoto from '@assets/userPhotoDefault.png'
 import { TouchableOpacity } from "react-native";
 import { useAuth } from "@hooks/useAuth";
+import { api } from "@services/api";
 export function HomeHeader() {
   const { user, signOut } = useAuth()
   function handleSignOut() {
@@ -18,7 +19,7 @@ export function HomeHeader() {
       alignItems='center'
 
     >
-      <UserPhoto mr={4} size={16} source={user?.avatar ? { uri: `${user?.avatar}` } : userDefaultPhoto} alt="foto do usuario" />
+      <UserPhoto mr={4} size={16} source={user?.avatar ? { uri: `${api.defaults.baseURL}/avatar/${user?.avatar}` } : userDefaultPhoto} alt="foto do usuario" />
       <VStack flex={1}>
         <Text color='gray.100' fontSize='md' fontFamily={'heading'}>Ola</Text>
         <Heading

@@ -53,7 +53,7 @@ export function History() {
           </Heading>
         )}
         px={8}
-        contentContainerStyle={[].length === 0 && { flex: 1, justifyContent: 'center' }}
+        contentContainerStyle={[].length === 0 && { justifyContent: 'center' }}
         ListEmptyComponent={() => (
           <VStack mt={'16'}>
             <Center>

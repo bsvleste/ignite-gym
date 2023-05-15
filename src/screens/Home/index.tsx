@@ -94,7 +94,7 @@ export function Home() {
               >
                 Exercicios
               </Heading>
-              <Text color={'gray.200'} fontSize={'md'}>4</Text>
+              <Text color={'gray.200'} fontSize={'md'}>{exercises.length}</Text>
             </HStack >
             <FlatList
               data={exercises}
